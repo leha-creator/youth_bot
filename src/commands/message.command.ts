@@ -19,7 +19,6 @@ export class MessageCommnds extends Command {
         const admins = this.adminService.getAdmins();
         console.log(ctx);
         admins.forEach(id => {
-            ctx.telegram.sendMessage(id, 'Новый вопрос:');
             ctx.telegram.copyMessage(id, ctx.message.from.id, ctx.message.message_id);
         });
     };
