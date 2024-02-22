@@ -12,6 +12,7 @@ export class MessageCommnds extends Command {
     handle(): void {
         this.bot.on('message', (ctx) => {
             this.forwardToAdmin(ctx);
+            ctx.reply('Получили вопрос, скоро ответим!')
         });
     }
 

@@ -8,6 +8,9 @@ import LocalSession from "telegraf-session-local";
 import { logger } from "./helpers/logger";
 import { AdminService } from "./helpers/admin.service";
 import { MessageCommnds } from "./commands/message.command";
+import { ListCommnds } from "./commands/list.command";
+import { ModCommnds } from "./commands/mod.command";
+import { UnmodCommnds } from "./commands/unmod.command";
 
 class Bot {
     bot: Telegraf<IBotContext>;
@@ -20,7 +23,13 @@ class Bot {
     }
 
     init() {
-        this.commands = [new StartCommnds(this.bot, adminService), new MessageCommnds(this.bot, adminService)];
+        this.commands = [
+            new StartCommnds(this.bot, adminService),
+            new ListCommnds(this.bot, adminService),
+            new ModCommnds(this.bot, adminService),
+            new UnmodCommnds(this.bot, adminService),
+            new MessageCommnds(this.bot, adminService),
+        ];
         for (const command of this.commands) {
             command.handle();
         }
