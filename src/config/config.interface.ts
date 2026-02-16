@@ -1,3 +1,3 @@
-export interface IConfigServise {
+export interface IConfigService {
     get(key: string): string;
 }

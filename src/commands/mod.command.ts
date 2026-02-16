@@ -3,7 +3,7 @@ import { Command } from "./command.class";
 import { IBotContext } from "../context/context.interface";
 import { AdminService } from "../helpers/admin.service";
 
-export class ModCommnds extends Command {
+export class ModCommands extends Command {
     constructor(bot: Telegraf<IBotContext>, public adminService: AdminService) {
         super(bot);
     }
@@ -11,7 +11,7 @@ export class ModCommnds extends Command {
     handle(): void {
         this.bot.command('mod', (ctx) => {
             if (!this.adminService.isAdmin(ctx.message.from.id)) {
-                ctx.reply(`Недостаточко прав`);
+                ctx.reply(`Недостаточно прав`);
                 return;
             }
 

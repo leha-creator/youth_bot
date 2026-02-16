@@ -1,22 +1,22 @@
 import { Telegraf } from "telegraf";
-import { IConfigServise } from "./config/config.interface";
-import { ConfigServise } from "./config/config.servise";
+import { IConfigService } from "./config/config.interface";
+import { ConfigService } from "./config/config.service";
 import { IBotContext } from "./context/context.interface";
 import { Command } from "./commands/command.class";
-import { StartCommnds } from "./commands/start.command";
+import { StartCommands } from "./commands/start.command";
 import LocalSession from "telegraf-session-local";
 import { logger } from "./helpers/logger";
 import { AdminService } from "./helpers/admin.service";
-import { MessageCommnds } from "./commands/message.command";
-import { ListCommnds } from "./commands/list.command";
-import { ModCommnds } from "./commands/mod.command";
-import { UnmodCommnds } from "./commands/unmod.command";
+import { MessageCommands } from "./commands/message.command";
+import { ListCommands } from "./commands/list.command";
+import { ModCommands } from "./commands/mod.command";
+import { UnmodCommands } from "./commands/unmod.command";
 
 class Bot {
     bot: Telegraf<IBotContext>;
     commands: Command[] = [];
-    constructor(private readonly configServise: IConfigServise) {
-        this.bot = new Telegraf<IBotContext>(this.configServise.get('TOKEN'));
+    constructor(private readonly configService: IConfigService) {
+        this.bot = new Telegraf<IBotContext>(this.configService.get('TOKEN'));
         this.bot.use(
             new LocalSession({ database: 'sessions.json' }).middleware()
         );
@@ -24,11 +24,11 @@ class Bot {
 
     init() {
         this.commands = [
-            new StartCommnds(this.bot, adminService),
-            new ListCommnds(this.bot, adminService),
-            new ModCommnds(this.bot, adminService),
-            new UnmodCommnds(this.bot, adminService),
-            new MessageCommnds(this.bot, adminService),
+            new StartCommands(this.bot, adminService),
+            new ListCommands(this.bot, adminService),
+            new ModCommands(this.bot, adminService),
+            new UnmodCommands(this.bot, adminService),
+            new MessageCommands(this.bot, adminService),
         ];
         for (const command of this.commands) {
             command.handle();
@@ -38,8 +38,8 @@ class Bot {
     }
 }
 
-const configServise = new ConfigServise();
-const bot = new Bot(configServise);
+const configService = new ConfigService();
+const bot = new Bot(configService);
 const adminService = AdminService.getInstance();
 
 const start = async () => {
