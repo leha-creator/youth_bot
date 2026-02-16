@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import path from "path";
 import { Telegraf } from "telegraf";
 import { IConfigService } from "./config/config.interface";
 import { ConfigService } from "./config/config.service";
@@ -12,13 +14,15 @@ import { ListCommands } from "./commands/list.command";
 import { ModCommands } from "./commands/mod.command";
 import { UnmodCommands } from "./commands/unmod.command";
 
+const dataDir = process.env.DATA_DIR || '.';
+
 class Bot {
     bot: Telegraf<IBotContext>;
     commands: Command[] = [];
     constructor(private readonly configService: IConfigService) {
         this.bot = new Telegraf<IBotContext>(this.configService.get('TOKEN'));
         this.bot.use(
-            new LocalSession({ database: 'sessions.json' }).middleware()
+            new LocalSession({ database: path.join(dataDir, 'sessions.json') }).middleware()
         );
     }
 
@@ -43,6 +47,11 @@ const bot = new Bot(configService);
 const adminService = AdminService.getInstance();
 
 const start = async () => {
+    try {
+        fs.mkdirSync(dataDir, { recursive: true });
+    } catch {
+        // Directory may already exist
+    }
     bot.init();
     logger.info('app started');
 };

@@ -24,4 +24,9 @@ export class ConfigService implements IConfigService {
 
         return res;
     }
+
+    getOptional(key: string, defaultValue: string): string {
+        const res = this.config[key] ?? process.env[key];
+        return res ?? defaultValue;
+    }
 }

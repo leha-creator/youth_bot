@@ -1,0 +1,12 @@
+node_modules
+dist
+.env
+.git
+*.log
+logs.json
+sessions.json
+admin.json
+.ai-factory
+.cursor
+.idea
+AGENTS.md
