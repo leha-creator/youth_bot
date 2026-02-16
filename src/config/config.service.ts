@@ -7,21 +7,20 @@ export class ConfigService implements IConfigService {
     constructor() {
         const { error, parsed } = config();
         if (error) {
-            throw new Error('Не найден файл .env');
+            // В Docker .env не копируется в образ, переменные приходят через env_file в process.env
+            this.config = {};
+        } else if (!parsed) {
+            this.config = {};
+        } else {
+            this.config = parsed;
         }
-        if (!parsed) {
-            throw new Error('Пустой файл .env');
-        }
-
-        this.config = parsed;
     }
 
     get(key: string): string {
-        const res = this.config[key];
+        const res = this.config[key] ?? process.env[key];
         if (!res) {
             throw new Error(`Нет такого ключа: ${key}`);
         }
-
         return res;
     }
 
